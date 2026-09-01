@@ -2966,11 +2966,20 @@ async function generateImageWithConfig(cfg, prompt, opts) {
       console.warn('[ImageGen] images/edits endpoint unavailable; falling back to generations:', e)
     }
   }
+  var ratioMap = {
+    '1024x1024': '1:1',
+    '512x512': '1:1',
+    '1024x1536': '2:3',
+    '1536x1024': '3:2',
+    '1024x1792': '9:16',
+    '1792x1024': '16:9'
+  }
   var body = {
     model: model,
     prompt: String(prompt),
     n: n,
-    size: size
+    aspect_ratio: ratioMap[size] || '1:1',
+    resolution: '1k'
   }
   if (opts.quality) body.quality = opts.quality
   if (opts.style) body.style = opts.style
