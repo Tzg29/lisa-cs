@@ -54,24 +54,36 @@ function setupIOSChatKeyboardGuard() {
   if (!window.visualViewport) return
   var root = document.documentElement
   var vv = window.visualViewport
+  var baseH = Math.max(window.innerHeight || 0, vv.height || 0)
+  var lastKb = 0
+  function chatInputFocused() {
+    var el = document.activeElement
+    return !!(el && el.classList && el.classList.contains('chat-input'))
+  }
+  function captureBase() {
+    if (chatInputFocused()) return
+    baseH = Math.max(window.innerHeight || 0, (vv.height || 0) + (vv.offsetTop || 0))
+  }
   function measureKb() {
-    return Math.max(0, Math.round(
-      (window.innerHeight || 0) - vv.height - (vv.offsetTop || 0)
-    ))
+    var visible = (vv.height || 0) + (vv.offsetTop || 0)
+    return Math.max(0, Math.round(baseH - visible))
   }
   function sync() {
     var page = document.querySelector('.chat-window-page')
-    var kb = page ? measureKb() : 0
-    if (kb > 80) {
-      root.classList.add('kb-open')
-      root.style.setProperty('--kb', kb + 'px')
-    } else {
+    if (!page || !chatInputFocused()) {
+      captureBase()
       root.classList.remove('kb-open')
       root.style.removeProperty('--kb')
+      return
     }
+    var kb = measureKb()
+    if (kb < 80) kb = lastKb || Math.round(baseH * 0.38)
+    if (kb > 80) lastKb = kb
+    root.classList.add('kb-open')
+    root.style.setProperty('--kb', kb + 'px')
     window.scrollTo(0, 0)
-    if (document.body) document.body.scrollTop = 0
   }
+  captureBase()
   vv.addEventListener('resize', sync, { passive: true })
   vv.addEventListener('scroll', sync, { passive: true })
   window.addEventListener('focusin', function (e) {
@@ -80,7 +92,9 @@ function setupIOSChatKeyboardGuard() {
     }
   }, true)
   window.addEventListener('focusout', function () {
-    setTimeout(sync, 80)
+    setTimeout(function () {
+      if (!chatInputFocused()) sync()
+    }, 200)
   }, true)
 }
 setupIOSChatKeyboardGuard()
