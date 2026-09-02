@@ -54,38 +54,22 @@ function setupIOSChatKeyboardGuard() {
   if (!window.visualViewport) return
   var root = document.documentElement
   var vv = window.visualViewport
-  function chatPage() {
-    return document.querySelector('.chat-window-page')
-  }
-  function clearPage(page) {
-    if (!page) return
-    page.style.top = ''
-    page.style.height = ''
-    page.style.left = ''
-    page.style.width = ''
-    page.style.bottom = ''
+  function measureKb() {
+    return Math.max(0, Math.round(
+      (window.innerHeight || 0) - vv.height - (vv.offsetTop || 0)
+    ))
   }
   function sync() {
-    var page = chatPage()
-    if (!page) {
-      root.classList.remove('kb-open')
-      return
-    }
-    var top = Math.max(0, Math.round(vv.offsetTop || 0))
-    var kb = Math.max(0, Math.round((window.innerHeight || 0) - vv.height - top))
-    if (kb > 60) {
+    var page = document.querySelector('.chat-window-page')
+    var kb = page ? measureKb() : 0
+    if (kb > 80) {
       root.classList.add('kb-open')
-      page.style.top = '0px'
-      page.style.left = '0px'
-      page.style.width = '100%'
-      page.style.height = ''
-      page.style.bottom = '0px'
+      root.style.setProperty('--kb', kb + 'px')
     } else {
       root.classList.remove('kb-open')
-      clearPage(page)
+      root.style.removeProperty('--kb')
     }
     window.scrollTo(0, 0)
-    if (document.documentElement) document.documentElement.scrollTop = 0
     if (document.body) document.body.scrollTop = 0
   }
   vv.addEventListener('resize', sync, { passive: true })
@@ -98,7 +82,6 @@ function setupIOSChatKeyboardGuard() {
   window.addEventListener('focusout', function () {
     setTimeout(sync, 80)
   }, true)
-  sync()
 }
 setupIOSChatKeyboardGuard()
 //结束
