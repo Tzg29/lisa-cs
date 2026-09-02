@@ -6721,27 +6721,27 @@ html.has-android-bottom-inset .chat-input-bar {
   white-space: nowrap;
 }
 //keep ios top
+//
 
-html.kb-open .chat-window-page {
-  position: fixed;
-  right: auto;
-  bottom: auto;
-}
+
 html.kb-open .chat-window-page .chat-header {
-  position: absolute;
+  position: fixed;
   top: 0;
   left: 0;
   right: 0;
+  z-index: 30;
 }
 html.kb-open .chat-window-page .chat-input-area {
-  position: relative;
-  bottom: auto;
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--kb, 0px);
   margin-top: 0;
-}
-html.kb-open .chat-window-page {
-  --chat-bottom-safe-extra: 0px;
-  --chat-input-overlay-height: 56px;
+  z-index: 30;
 }
 html.kb-open .chat-window-page .chat-input-bar {
   padding-bottom: 8px;
+}
+html.kb-open .chat-window-page .chat-messages {
+  padding-bottom: calc(68px + var(--kb, 0px));
 }
