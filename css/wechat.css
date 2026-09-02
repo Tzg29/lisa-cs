@@ -6720,3 +6720,24 @@ html.has-android-bottom-inset .chat-input-bar {
   background: rgba(87, 107, 149, 0.1);
   white-space: nowrap;
 }
+//keep ios top
+
+html.kb-open .chat-window-page .chat-header {
+  position: fixed;
+  top: var(--vv-top, 0px);
+  left: 0;
+  right: 0;
+  width: 100%;
+  z-index: 30;
+}
+html.kb-open .chat-window-page .chat-input-area {
+  position: fixed;
+  left: 0;
+  right: 0;
+  bottom: var(--kb-height, 0px);
+  margin-top: 0;
+  z-index: 30;
+}
+html.kb-open .chat-window-page .chat-messages {
+  padding-top: calc(var(--chat-header-height) + 12px + var(--vv-top, 0px));
+}
