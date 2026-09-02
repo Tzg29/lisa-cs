@@ -63,6 +63,7 @@ function setupIOSChatKeyboardGuard() {
     page.style.height = ''
     page.style.left = ''
     page.style.width = ''
+    page.style.bottom = ''
   }
   function sync() {
     var page = chatPage()
@@ -71,14 +72,14 @@ function setupIOSChatKeyboardGuard() {
       return
     }
     var top = Math.max(0, Math.round(vv.offsetTop || 0))
-    var height = Math.max(0, Math.round(vv.height || 0))
     var kb = Math.max(0, Math.round((window.innerHeight || 0) - vv.height - top))
     if (kb > 60) {
       root.classList.add('kb-open')
-      page.style.top = top + 'px'
-      page.style.height = height + 'px'
-      page.style.left = Math.round(vv.offsetLeft || 0) + 'px'
-      page.style.width = Math.round(vv.width || window.innerWidth) + 'px'
+      page.style.top = '0px'
+      page.style.left = '0px'
+      page.style.width = '100%'
+      page.style.height = ''
+      page.style.bottom = '0px'
     } else {
       root.classList.remove('kb-open')
       clearPage(page)
