@@ -6722,22 +6722,19 @@ html.has-android-bottom-inset .chat-input-bar {
 }
 //keep ios top
 
-html.kb-open .chat-window-page .chat-header {
+html.kb-open .chat-window-page {
   position: fixed;
-  top: var(--vv-top, 0px);
+  right: auto;
+  bottom: auto;
+}
+html.kb-open .chat-window-page .chat-header {
+  position: absolute;
+  top: 0;
   left: 0;
   right: 0;
-  width: 100%;
-  z-index: 30;
 }
 html.kb-open .chat-window-page .chat-input-area {
-  position: fixed;
-  left: 0;
-  right: 0;
-  bottom: var(--kb-height, 0px);
+  position: relative;
+  bottom: auto;
   margin-top: 0;
-  z-index: 30;
-}
-html.kb-open .chat-window-page .chat-messages {
-  padding-top: calc(var(--chat-header-height) + 12px + var(--vv-top, 0px));
 }
