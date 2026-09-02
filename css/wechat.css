@@ -6724,8 +6724,13 @@ html.has-android-bottom-inset .chat-input-bar {
 
 html.kb-open .chat-window-page {
   position: fixed;
-  right: auto;
-  bottom: auto;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  height: auto;
+  --chat-bottom-safe-extra: 0px;
+  --chat-input-overlay-height: 56px;
 }
 html.kb-open .chat-window-page .chat-header {
   position: absolute;
@@ -6737,10 +6742,6 @@ html.kb-open .chat-window-page .chat-input-area {
   position: relative;
   bottom: auto;
   margin-top: 0;
-}
-html.kb-open .chat-window-page {
-  --chat-bottom-safe-extra: 0px;
-  --chat-input-overlay-height: 56px;
 }
 html.kb-open .chat-window-page .chat-input-bar {
   padding-bottom: 8px;
