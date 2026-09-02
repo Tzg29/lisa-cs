@@ -53,23 +53,44 @@ setupAndroidBottomInset()
 function setupIOSChatKeyboardGuard() {
   if (!window.visualViewport) return
   var root = document.documentElement
-  function sync() {
-    var vv = window.visualViewport
-    var top = Math.max(0, Math.round(vv.offsetTop || 0))
-    var kb = Math.max(0, Math.round((window.innerHeight || 0) - vv.height - top))
-    root.style.setProperty('--vv-top', top + 'px')
-    root.style.setProperty('--kb-height', kb + 'px')
-    root.classList.toggle('kb-open', kb > 60)
-    if (document.querySelector('.chat-window-page')) {
-      window.scrollTo(0, 0)
-      if (document.documentElement) document.documentElement.scrollTop = 0
-      if (document.body) document.body.scrollTop = 0
-      var app = document.getElementById('app')
-      if (app) app.scrollTop = 0
-    }
+  var vv = window.visualViewport
+  function chatPage() {
+    return document.querySelector('.chat-window-page')
   }
-  window.visualViewport.addEventListener('resize', sync, { passive: true })
-  window.visualViewport.addEventListener('scroll', sync, { passive: true })
+  function clearPage(page) {
+    if (!page) return
+    page.style.top = ''
+    page.style.height = ''
+    page.style.left = ''
+    page.style.width = ''
+  }
+  function sync() {
+    var page = chatPage()
+    if (!page) {
+      root.classList.remove('kb-open')
+      return
+    }
+    var top = Math.max(0, Math.round(vv.offsetTop || 0))
+    var height = Math.max(0, Math.round(vv.height || 0))
+    var kb = Math.max(0, Math.round((window.innerHeight || 0) - vv.height - top))
+    if (kb > 60) {
+      root.classList.add('kb-open')
+      page.style.top = top + 'px'
+      page.style.height = height + 'px'
+      page.style.left = Math.round(vv.offsetLeft || 0) + 'px'
+      page.style.width = Math.round(vv.width || window.innerWidth) + 'px'
+    } else {
+      root.classList.remove('kb-open')
+      clearPage(page)
+    }
+    window.scrollTo(0, 0)
+    if (document.documentElement) document.documentElement.scrollTop = 0
+    if (document.body) document.body.scrollTop = 0
+    var msgs = page.querySelector('.chat-messages')
+    if (msgs && kb > 60) msgs.scrollTop = msgs.scrollHeight
+  }
+  vv.addEventListener('resize', sync, { passive: true })
+  vv.addEventListener('scroll', sync, { passive: true })
   window.addEventListener('focusin', function (e) {
     if (e.target && e.target.classList && e.target.classList.contains('chat-input')) {
       setTimeout(sync, 50)
