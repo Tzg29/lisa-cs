@@ -49,6 +49,40 @@ function setupAndroidBottomInset() {
   window.visualViewport.addEventListener('scroll', scheduleUpdate, { passive: true })
 }
 setupAndroidBottomInset()
+// ===== 保留ios抬头=====
+function setupIOSChatKeyboardGuard() {
+  if (!window.visualViewport) return
+  var root = document.documentElement
+  function sync() {
+    var vv = window.visualViewport
+    var top = Math.max(0, Math.round(vv.offsetTop || 0))
+    var kb = Math.max(0, Math.round((window.innerHeight || 0) - vv.height - top))
+    root.style.setProperty('--vv-top', top + 'px')
+    root.style.setProperty('--kb-height', kb + 'px')
+    root.classList.toggle('kb-open', kb > 60)
+    if (document.querySelector('.chat-window-page')) {
+      window.scrollTo(0, 0)
+      if (document.documentElement) document.documentElement.scrollTop = 0
+      if (document.body) document.body.scrollTop = 0
+      var app = document.getElementById('app')
+      if (app) app.scrollTop = 0
+    }
+  }
+  window.visualViewport.addEventListener('resize', sync, { passive: true })
+  window.visualViewport.addEventListener('scroll', sync, { passive: true })
+  window.addEventListener('focusin', function (e) {
+    if (e.target && e.target.classList && e.target.classList.contains('chat-input')) {
+      setTimeout(sync, 50)
+      setTimeout(sync, 320)
+    }
+  }, true)
+  window.addEventListener('focusout', function () {
+    setTimeout(sync, 80)
+  }, true)
+  sync()
+}
+setupIOSChatKeyboardGuard()
+//结束
 
 // ===== 桌面/PWA 应用图标 =====
 var APP_ICON_CONFIG_KEY = 'appIconSettings'
