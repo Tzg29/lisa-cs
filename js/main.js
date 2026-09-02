@@ -81,6 +81,10 @@ function setupIOSChatKeyboardGuard() {
     if (kb > 80) lastKb = kb
     root.classList.add('kb-open')
     root.style.setProperty('--kb', kb + 'px')
+    //
+    var msgs = page.querySelector('.chat-messages')
+    if (msgs) msgs.scrollTop = msgs.scrollHeight
+    //
     window.scrollTo(0, 0)
   }
   captureBase()
