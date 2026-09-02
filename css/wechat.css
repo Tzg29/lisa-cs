@@ -6738,3 +6738,10 @@ html.kb-open .chat-window-page .chat-input-area {
   bottom: auto;
   margin-top: 0;
 }
+html.kb-open .chat-window-page {
+  --chat-bottom-safe-extra: 0px;
+  --chat-input-overlay-height: 56px;
+}
+html.kb-open .chat-window-page .chat-input-bar {
+  padding-bottom: 8px;
+}
