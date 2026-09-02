@@ -86,15 +86,12 @@ function setupIOSChatKeyboardGuard() {
     window.scrollTo(0, 0)
     if (document.documentElement) document.documentElement.scrollTop = 0
     if (document.body) document.body.scrollTop = 0
-    var msgs = page.querySelector('.chat-messages')
-    if (msgs && kb > 60) msgs.scrollTop = msgs.scrollHeight
   }
   vv.addEventListener('resize', sync, { passive: true })
   vv.addEventListener('scroll', sync, { passive: true })
   window.addEventListener('focusin', function (e) {
     if (e.target && e.target.classList && e.target.classList.contains('chat-input')) {
       setTimeout(sync, 50)
-      setTimeout(sync, 320)
     }
   }, true)
   window.addEventListener('focusout', function () {
